@@ -1,6 +1,10 @@
+<p align="center">
+  <img src="docs/assets/banner.png" alt="Harasyn - Zero Trust Access Platform" width="100%">
+</p>
+
 # Harasyn
 
-**This project was built using OpenCode with Kimi K2.6.**
+**This project was built using OpenCode with micromac MiMo V2.5.**
 
 ## Zero Trust Access Platform
 
@@ -107,6 +111,10 @@ curl -X POST http://localhost:8080/api/v1/sessions \
 ```
 
 ### Architecture Overview
+
+<p align="center">
+  <img src="docs/assets/architecture.png" alt="Harasyn Architecture" width="100%">
+</p>
 
 See [docs/architecture.md](docs/architecture.md) for a detailed architectural overview.
 
