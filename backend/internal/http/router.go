@@ -5,18 +5,20 @@ import (
 )
 
 type Router struct {
-	mux           *http.ServeMux
-	deviceHandler *DeviceHandler
-	userHandler   *UserHandler
-	healthHandler *HealthHandler
+	mux             *http.ServeMux
+	deviceHandler   *DeviceHandler
+	userHandler     *UserHandler
+	resourceHandler *ResourceHandler
+	healthHandler   *HealthHandler
 }
 
-func NewRouter(deviceHandler *DeviceHandler, userHandler *UserHandler) *Router {
+func NewRouter(deviceHandler *DeviceHandler, userHandler *UserHandler, resourceHandler *ResourceHandler) *Router {
 	return &Router{
-		mux:           http.NewServeMux(),
-		deviceHandler: deviceHandler,
-		userHandler:   userHandler,
-		healthHandler: &HealthHandler{},
+		mux:             http.NewServeMux(),
+		deviceHandler:   deviceHandler,
+		userHandler:     userHandler,
+		resourceHandler: resourceHandler,
+		healthHandler:   &HealthHandler{},
 	}
 }
 
@@ -25,6 +27,8 @@ func (r *Router) Setup() {
 	r.mux.HandleFunc("/api/v1/devices", r.handleDevices)
 	r.mux.HandleFunc("/api/v1/devices/", r.handleDeviceByID)
 	r.mux.HandleFunc("/api/v1/users/context", r.handleUserContext)
+	r.mux.HandleFunc("/api/v1/resources", r.handleResources)
+	r.mux.HandleFunc("/api/v1/resources/", r.handleResourceByID)
 }
 
 func (r *Router) handleDevices(w http.ResponseWriter, req *http.Request) {
@@ -55,6 +59,25 @@ func (r *Router) handleUserContext(w http.ResponseWriter, req *http.Request) {
 	default:
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 	}
+}
+
+func (r *Router) handleResources(w http.ResponseWriter, req *http.Request) {
+	switch req.Method {
+	case http.MethodGet:
+		r.resourceHandler.ListResources(w, req)
+	case http.MethodPost:
+		r.resourceHandler.RegisterResource(w, req)
+	default:
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+func (r *Router) handleResourceByID(w http.ResponseWriter, req *http.Request) {
+	if req.Method == http.MethodGet {
+		r.resourceHandler.GetResource(w, req)
+		return
+	}
+	http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 }
 
 func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
