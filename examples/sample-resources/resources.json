@@ -1,0 +1,54 @@
+{
+  "resources": [
+    {
+      "name": "Internal Wiki",
+      "resource_type": "web_app",
+      "endpoint": "https://wiki.internal.example.com",
+      "sensitivity": "internal",
+      "connector": {
+        "connector_type": "http_proxy",
+        "target_host": "wiki.internal.example.com",
+        "target_port": 443,
+        "tls_required": true
+      }
+    },
+    {
+      "name": "Production Database",
+      "resource_type": "database",
+      "endpoint": "db.prod.internal.example.com",
+      "port": 5432,
+      "sensitivity": "critical",
+      "connector": {
+        "connector_type": "database_proxy",
+        "target_host": "db.prod.internal.example.com",
+        "target_port": 5432,
+        "tls_required": true
+      }
+    },
+    {
+      "name": "SSH Bastion",
+      "resource_type": "ssh",
+      "endpoint": "bastion.internal.example.com",
+      "port": 22,
+      "sensitivity": "restricted",
+      "connector": {
+        "connector_type": "tcp_tunnel",
+        "target_host": "bastion.internal.example.com",
+        "target_port": 22,
+        "tls_required": true
+      }
+    },
+    {
+      "name": "API Gateway",
+      "resource_type": "api",
+      "endpoint": "https://api.internal.example.com",
+      "sensitivity": "internal",
+      "connector": {
+        "connector_type": "http_proxy",
+        "target_host": "api.internal.example.com",
+        "target_port": 443,
+        "tls_required": true
+      }
+    }
+  ]
+}

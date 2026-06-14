@@ -1,0 +1,10 @@
+{
+  "name": "Business Hours Only",
+  "description": "Restrict access to business hours only",
+  "policy_type": "access",
+  "effect": "deny",
+  "priority": 150,
+  "conditions": [
+    {"type": "time", "operator": "==", "value": "false"}
+  ]
+}

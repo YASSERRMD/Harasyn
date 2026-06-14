@@ -1,0 +1,13 @@
+{
+  "name": "Critical Resource Access",
+  "description": "Strict policy for critical resources requiring high trust and MFA",
+  "policy_type": "access",
+  "effect": "allow",
+  "priority": 50,
+  "conditions": [
+    {"type": "device_trust", "operator": ">=", "value": "80"},
+    {"type": "user_trust", "operator": ">=", "value": "70"},
+    {"type": "mfa_status", "operator": "==", "value": "true"},
+    {"type": "resource_sensitivity", "operator": "in", "value": "restricted,critical"}
+  ]
+}

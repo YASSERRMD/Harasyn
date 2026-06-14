@@ -1,0 +1,10 @@
+{
+  "name": "Block Untrusted Devices",
+  "description": "Deny access for devices with low trust scores",
+  "policy_type": "access",
+  "effect": "deny",
+  "priority": 200,
+  "conditions": [
+    {"type": "device_trust", "operator": "<", "value": "40"}
+  ]
+}
