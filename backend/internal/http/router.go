@@ -10,6 +10,7 @@ type Router struct {
 	userHandler     *UserHandler
 	resourceHandler *ResourceHandler
 	policyHandler   *PolicyHandler
+	sessionHandler  *SessionHandler
 	healthHandler   *HealthHandler
 }
 
@@ -18,6 +19,7 @@ func NewRouter(
 	userHandler *UserHandler,
 	resourceHandler *ResourceHandler,
 	policyHandler *PolicyHandler,
+	sessionHandler *SessionHandler,
 ) *Router {
 	return &Router{
 		mux:             http.NewServeMux(),
@@ -25,6 +27,7 @@ func NewRouter(
 		userHandler:     userHandler,
 		resourceHandler: resourceHandler,
 		policyHandler:   policyHandler,
+		sessionHandler:  sessionHandler,
 		healthHandler:   &HealthHandler{},
 	}
 }
@@ -37,6 +40,8 @@ func (r *Router) Setup() {
 	r.mux.HandleFunc("/api/v1/resources", r.handleResources)
 	r.mux.HandleFunc("/api/v1/resources/", r.handleResourceByID)
 	r.mux.HandleFunc("/api/v1/policies/evaluate", r.handlePolicyEvaluate)
+	r.mux.HandleFunc("/api/v1/sessions", r.handleSessions)
+	r.mux.HandleFunc("/api/v1/sessions/", r.handleSessionByID)
 }
 
 func (r *Router) handleDevices(w http.ResponseWriter, req *http.Request) {
@@ -94,6 +99,28 @@ func (r *Router) handlePolicyEvaluate(w http.ResponseWriter, req *http.Request) 
 		return
 	}
 	http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+}
+
+func (r *Router) handleSessions(w http.ResponseWriter, req *http.Request) {
+	switch req.Method {
+	case http.MethodGet:
+		r.sessionHandler.ListActiveSessions(w, req)
+	case http.MethodPost:
+		r.sessionHandler.CreateSession(w, req)
+	default:
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+func (r *Router) handleSessionByID(w http.ResponseWriter, req *http.Request) {
+	switch req.Method {
+	case http.MethodGet:
+		r.sessionHandler.GetSession(w, req)
+	case http.MethodDelete:
+		r.sessionHandler.RevokeSession(w, req)
+	default:
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+	}
 }
 
 func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
