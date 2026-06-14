@@ -12,6 +12,7 @@ type Router struct {
 	policyHandler   *PolicyHandler
 	sessionHandler  *SessionHandler
 	accessHandler   *AccessHandler
+	auditHandler    *AuditHandler
 	healthHandler   *HealthHandler
 }
 
@@ -22,6 +23,7 @@ func NewRouter(
 	policyHandler *PolicyHandler,
 	sessionHandler *SessionHandler,
 	accessHandler *AccessHandler,
+	auditHandler *AuditHandler,
 ) *Router {
 	return &Router{
 		mux:             http.NewServeMux(),
@@ -31,6 +33,7 @@ func NewRouter(
 		policyHandler:   policyHandler,
 		sessionHandler:  sessionHandler,
 		accessHandler:   accessHandler,
+		auditHandler:    auditHandler,
 		healthHandler:   &HealthHandler{},
 	}
 }
@@ -49,6 +52,8 @@ func (r *Router) Setup() {
 	r.mux.HandleFunc("/api/v1/access-requests/", r.handleAccessRequestByID)
 	r.mux.HandleFunc("/api/v1/access-requests/approve", r.handleApproveRequest)
 	r.mux.HandleFunc("/api/v1/access-requests/reject", r.handleRejectRequest)
+	r.mux.HandleFunc("/api/v1/audit", r.handleAudit)
+	r.mux.HandleFunc("/api/v1/audit/", r.handleAuditByID)
 }
 
 func (r *Router) handleDevices(w http.ResponseWriter, req *http.Request) {
@@ -160,6 +165,25 @@ func (r *Router) handleApproveRequest(w http.ResponseWriter, req *http.Request) 
 func (r *Router) handleRejectRequest(w http.ResponseWriter, req *http.Request) {
 	if req.Method == http.MethodPost {
 		r.accessHandler.RejectRequest(w, req)
+		return
+	}
+	http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+}
+
+func (r *Router) handleAudit(w http.ResponseWriter, req *http.Request) {
+	switch req.Method {
+	case http.MethodGet:
+		r.auditHandler.ListEvents(w, req)
+	case http.MethodPost:
+		r.auditHandler.LogEvent(w, req)
+	default:
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+func (r *Router) handleAuditByID(w http.ResponseWriter, req *http.Request) {
+	if req.Method == http.MethodGet {
+		r.auditHandler.GetEvent(w, req)
 		return
 	}
 	http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
