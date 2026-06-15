@@ -1,0 +1,41 @@
+[
+  {
+    "apiVersion": "v1",
+    "kind": "User",
+    "metadata": {
+      "name": "alice.johnson@acme.com",
+      "tenant_id": "acme-corp"
+    },
+    "spec": {
+      "role": "admin",
+      "department": "engineering",
+      "mfa_enabled": true
+    }
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "User",
+    "metadata": {
+      "name": "bob.smith@acme.com",
+      "tenant_id": "acme-corp"
+    },
+    "spec": {
+      "role": "developer",
+      "department": "engineering",
+      "mfa_enabled": true
+    }
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "User",
+    "metadata": {
+      "name": "charlie.brown@acme.com",
+      "tenant_id": "acme-corp"
+    },
+    "spec": {
+      "role": "viewer",
+      "department": "marketing",
+      "mfa_enabled": false
+    }
+  }
+]
