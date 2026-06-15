@@ -1,0 +1,101 @@
+[
+  {
+    "apiVersion": "v1",
+    "kind": "Policy",
+    "metadata": {
+      "name": "engineering-full-access",
+      "tenant_id": "acme-corp"
+    },
+    "spec": {
+      "description": "Full access for engineering team to production resources",
+      "effect": "allow",
+      "resources": ["api-gateway-prod", "database-primary", "k8s-cluster"],
+      "actions": ["read", "write", "execute"],
+      "conditions": [
+        {
+          "type": "identity",
+          "operator": "equals",
+          "value": "engineering"
+        },
+        {
+          "type": "device",
+          "operator": "equals",
+          "value": "managed"
+        }
+      ]
+    }
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Policy",
+    "metadata": {
+      "name": "marketing-read-only",
+      "tenant_id": "acme-corp"
+    },
+    "spec": {
+      "description": "Read-only access for marketing team",
+      "effect": "allow",
+      "resources": ["admin-console"],
+      "actions": ["read"],
+      "conditions": [
+        {
+          "type": "identity",
+          "operator": "equals",
+          "value": "marketing"
+        },
+        {
+          "type": "time",
+          "operator": "within",
+          "value": "business_hours"
+        }
+      ]
+    }
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Policy",
+    "metadata": {
+      "name": "deny-unmanaged-devices",
+      "tenant_id": "acme-corp"
+    },
+    "spec": {
+      "description": "Deny access from unmanaged devices",
+      "effect": "deny",
+      "resources": ["*"],
+      "actions": ["*"],
+      "conditions": [
+        {
+          "type": "device",
+          "operator": "equals",
+          "value": "unmanaged"
+        }
+      ]
+    }
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Policy",
+    "metadata": {
+      "name": "high-sensitivity-mfa",
+      "tenant_id": "acme-corp"
+    },
+    "spec": {
+      "description": "Require MFA for high sensitivity resources",
+      "effect": "allow",
+      "resources": ["database-primary", "k8s-cluster"],
+      "actions": ["read", "write", "execute"],
+      "conditions": [
+        {
+          "type": "mfa",
+          "operator": "equals",
+          "value": "verified"
+        },
+        {
+          "type": "risk",
+          "operator": "less_than",
+          "value": 30
+        }
+      ]
+    }
+  }
+]

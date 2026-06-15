@@ -1,0 +1,60 @@
+[
+  {
+    "apiVersion": "v1",
+    "kind": "Resource",
+    "metadata": {
+      "name": "api-gateway-prod",
+      "tenant_id": "acme-corp"
+    },
+    "spec": {
+      "type": "http",
+      "url": "https://api.acme.com",
+      "sensitivity": "confidential",
+      "environment": "production"
+    }
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Resource",
+    "metadata": {
+      "name": "database-primary",
+      "tenant_id": "acme-corp"
+    },
+    "spec": {
+      "type": "database",
+      "host": "db.acme.com",
+      "port": 5432,
+      "sensitivity": "restricted",
+      "environment": "production"
+    }
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Resource",
+    "metadata": {
+      "name": "k8s-cluster",
+      "tenant_id": "acme-corp"
+    },
+    "spec": {
+      "type": "ssh",
+      "host": "k8s.acme.com",
+      "port": 22,
+      "sensitivity": "restricted",
+      "environment": "production"
+    }
+  },
+  {
+    "apiVersion": "v1",
+    "kind": "Resource",
+    "metadata": {
+      "name": "admin-console",
+      "tenant_id": "acme-corp"
+    },
+    "spec": {
+      "type": "http",
+      "url": "https://admin.acme.com",
+      "sensitivity": "confidential",
+      "environment": "production"
+    }
+  }
+]

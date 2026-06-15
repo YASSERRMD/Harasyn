@@ -1,0 +1,15 @@
+{
+  "apiVersion": "v1",
+  "kind": "Tenant",
+  "metadata": {
+    "name": "acme-corp",
+    "display_name": "ACME Corporation"
+  },
+  "spec": {
+    "plan": "enterprise",
+    "max_users": 1000,
+    "max_devices": 5000,
+    "max_resources": 500,
+    "max_policies": 100
+  }
+}
