@@ -4,7 +4,7 @@
 
 # Harasyn
 
-**This project was built using OpenCode with micromac MiMo V2.5.**
+**This project was built using OpenCode with Xiaomi MiMo V2.5.**
 
 ## Zero Trust Access Platform
 
